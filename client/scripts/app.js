@@ -2,20 +2,22 @@
 
 var app = {
 
+	friends: [],
+
 	// message : {
 	//   username: 'shawndrost',
 	//   text: 'trololo',
 	//   roomname: '4chan'
 	//   },
 
-  init: function (data) {
+  init: function (message) {
 
     $.ajax({
       // This is the url you should use to communicate with the parse API server.
       url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
       type: 'POST',
-      data: JSON.stringify(message),
       contentType: 'application/json',
+      
       success: function (data) {
         console.log('initialized');
       },
@@ -55,8 +57,22 @@ var app = {
 
   renderMessage: function (message) {
     var addChat = $('<div></div>');
+    var addUsername = $('<div class="username" data-username=' + message.username.split(' ').join("") + '></div>');
+    var context = this;
+    addUsername.on('click', function() {
+      	context.handleUsernameClick(message.username)
+      	console.log(this);
+      });
     addChat.text(message.text);
-    $('#chats').append(addChat);
+    
+    //if ( !$('#main').find('#username') ) {
+    	addUsername.text(message.username);
+    	addUsername.attr('id', message.username.split(' ').join(""));
+    	$('#main').append(addUsername);
+    //}
+    $('#chats').append(message.username).append(addChat);
+    //if (!$(#main).message.user)
+      //append user to main
   },
 
   renderRoom: function(message) {
@@ -70,10 +86,13 @@ var app = {
     $('#roomSelect').append(addRoom);
   },
 
-  handleUsernameClick: {
-    restore: function () {
-      $(this).append('');
-    }
+  handleUsernameClick:  function (username) {
+  	app.friends.push(username);
+      // $('#main').on('click', function() {
+      // 	app.friends.push(message.username)
+      // 	console.log('hi');
+      // });
+      // called: false
   }
 };
 
